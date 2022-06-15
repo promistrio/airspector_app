@@ -47,7 +47,7 @@ class MissionFromFilePage extends StatelessWidget {
     Map<String, dynamic> outputMission = {};
     Map<String, dynamic> mission = jsonDecode(data);
     int counter = 1;
-    double pitch = 0;
+    int pitch = 0;
     double yaw = 0;
 
     if (mission.containsKey("mission")) {

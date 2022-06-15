@@ -70,7 +70,7 @@ class MissionApiController {
     String body = jsonEncode({"args": {}});
     final response = await http.post(
       Uri.parse(
-          'http://192.168.10.1/api/set_skill/airspector2.wp_flight.WpFlight'),
+          'http://192.168.10.1/api/set_skill/airspector2.wp_flight_gps.WpFlightGps'),
       headers: headers,
       body: body,
     );
@@ -92,10 +92,10 @@ class MissionApiController {
       'Accept': 'application/json',
       'Authorization': 'Bearer ' + _skydioToken,
     };
-
+    json = jsonEncode({"route": jsonDecode(json)});
     String body = jsonEncode({
       "data": base64.encode(utf8.encode(json)),
-      "skill_key": 'airspector2.wp_flight.WpFlight',
+      "skill_key": 'airspector2.wp_flight_gps.WpFlightGps',
       "no_response": false,
     });
     final response = await http.post(
@@ -115,7 +115,7 @@ class MissionApiController {
     }
   }
 
-  Future<String> uploadMissionSkydio() => uploadMissionSkydioFromJson(_points);
+  Future<String> uploadMissionSkydio() => uploadMissionSkydioFromJson(jsonEncode({"route": _points}));
 
   /*
   import 'dart:convert';
