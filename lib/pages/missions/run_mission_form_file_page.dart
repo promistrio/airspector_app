@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:airspector/business_logic/providers/mission_provider.dart';
+import 'package:wifi_iot/wifi_iot.dart';
 
 class RunMissionFromFilePage extends StatelessWidget {
   final String jsonMission;
@@ -18,7 +19,7 @@ class RunMissionFromFilePage extends StatelessWidget {
   });
 
   RunMissionFromFilePage({Key? key, required this.jsonMission, ccount})
-      : super(key: key){
+      : super(key: key) {
     _count = ccount;
     form.control("waypointsCount").value = _count;
   }
@@ -79,6 +80,12 @@ class RunMissionFromFilePage extends StatelessWidget {
             ),
             ElevatedButton(
                 onPressed: () {
+                  WiFiForIoTPlugin.forceWifiUsage(true).then((value) {
+                    ScaffoldMessenger.of(context)
+                      ..removeCurrentSnackBar()
+                      ..showSnackBar(const SnackBar(
+                          content: Text("Режим принудительного wifi ON")));
+                  });
                   missionProvider.missionController
                       .loginMission()
                       .then((value) {
@@ -88,10 +95,12 @@ class RunMissionFromFilePage extends StatelessWidget {
                       ..showSnackBar(
                           const SnackBar(content: Text("Загружено")));
                   });
+                  WiFiForIoTPlugin.forceWifiUsage(false);
                 },
                 child: const Text('Login To Device')),
             ElevatedButton(
                 onPressed: () {
+                  WiFiForIoTPlugin.forceWifiUsage(true);
                   missionProvider.missionController.skillset().then((value) {
                     form.control("output").value = value;
                     ScaffoldMessenger.of(context)
@@ -99,10 +108,12 @@ class RunMissionFromFilePage extends StatelessWidget {
                       ..showSnackBar(
                           const SnackBar(content: Text("Загружено")));
                   });
+                  WiFiForIoTPlugin.forceWifiUsage(false);
                 },
                 child: const Text('SkillSet')),
             ElevatedButton(
                 onPressed: () {
+                  WiFiForIoTPlugin.forceWifiUsage(true);
                   missionProvider.missionController
                       .uploadFromFile(jsonMission)
                       .then((value) {
@@ -112,6 +123,7 @@ class RunMissionFromFilePage extends StatelessWidget {
                       ..showSnackBar(
                           const SnackBar(content: Text("Загружено")));
                   });
+                  WiFiForIoTPlugin.forceWifiUsage(false);
                 },
                 child: const Text('Upload'))
           ],
